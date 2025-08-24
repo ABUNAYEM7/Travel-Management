@@ -12,29 +12,37 @@ const MainLayout = () => {
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       {isHome ? (
-        // Home header with hero + background
-        <div className="min-h-screen bg-[url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop')] bg-cover bg-center">
-          <div className="bg-black/40">
-            <Navbar />
-            <Hero />
+        // ✅ Homepage: shared hero background
+        <header className="relative">
+          {/* background image */}
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              backgroundImage:
+                "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop')",
+            }}
+          />
+          {/* overlay */}
+          <div className="absolute inset-0 bg-black/45" />
+          {/* content */}
+          <div className="relative">
+            <Navbar transparent /> {/* 👈 pass prop to make it transparent */}
+            <Hero overlay={false} /> {/* 👈 disable Hero’s own overlay */}
           </div>
-        </div>
+        </header>
       ) : (
-        // Other pages: navbar only (no hero/background)
+        // ✅ Other pages: normal navbar with background
         <header>
-          <Navbar />
+          <Navbar /> {/* no transparent prop → has bg */}
         </header>
       )}
 
-      {/* Content */}
-      <main className={`flex-1 ${isHome ? "" : "pt-4 min-h-screen"}`}>
+      {/* Main content */}
+      <main className="flex-1 min-h-screen">
         <Outlet />
       </main>
 
-      {/* Footer */}
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </div>
   );
 };

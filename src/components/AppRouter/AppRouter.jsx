@@ -1,17 +1,18 @@
-import React from 'react'
-import { Route, Routes } from 'react-router-dom'
-import MainLayout from '../MainLayout/MainLayout'
-import HomePage from '../Pages/HomePage/HomePage'
-import About from '../Pages/About/About'
-import Packages from '../Pages/Packages/Packages'
-import Hotels from '../Pages/Hotels/Hotels'
-import Insurance from '../Pages/Insurance/Insurence'
-import Contact from '../Pages/Contact/Contact'
-import Blog from '../Pages/Blog/Blog'
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import MainLayout from "../MainLayout/MainLayout";
+import HomePage from "../Pages/HomePage/HomePage";
+import About from "../Pages/About/About";
+import Packages from "../Pages/Packages/Packages";
+import Hotels from "../Pages/Hotels/Hotels";
+import Insurance from "../Pages/Insurance/Insurence";
+import Contact from "../Pages/Contact/Contact";
+import Blog from "../Pages/Blog/Blog";
+import PackageDetails from "../Pages/PackageDetails/PackageDetails";
 
 const AppRouter = () => {
   return (
-     <Routes>
+    <Routes>
       {/* Layout wraps all pages */}
       <Route path="/" element={<MainLayout />}>
         {/* This renders at "/" inside MainLayout's <Outlet /> */}
@@ -24,12 +25,12 @@ const AppRouter = () => {
         <Route path="insurance" element={<Insurance />} />
         <Route path="contact" element={<Contact />} />
         <Route path="blog" element={<Blog />} />
-
+        <Route path="packages/:id" element={<PackageDetails />} />
         {/* 404 */}
         {/* <Route path="*" element={<NotFound />} /> */}
       </Route>
     </Routes>
-  )
-}
+  );
+};
 
-export default AppRouter
+export default AppRouter;

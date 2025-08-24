@@ -2,77 +2,17 @@ import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 const PACKAGES = [
-  {
-    id: "paris-city-break",
-    title: "Paris City Break",
-    country: "France",
-    days: 4,
-    rating: 4.8,
-    reviews: 231,
-    price: 799,
-    type: "City",
-    img: "https://images.unsplash.com/photo-1508057198894-247b23fe5ade?q=80&w=1400&auto=format&fit=crop",
-  },
-  {
-    id: "amalfi-coast-sun",
-    title: "Amalfi Coast Sun",
-    country: "Italy",
-    days: 6,
-    rating: 4.7,
-    reviews: 188,
-    price: 1190,
-    type: "Beach",
-    img: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1400&auto=format&fit=crop",
-  },
-  {
-    id: "swiss-alps-trek",
-    title: "Swiss Alps Trek",
-    country: "Switzerland",
-    days: 7,
-    rating: 4.9,
-    reviews: 142,
-    price: 1390,
-    type: "Adventure",
-    img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1400&auto=format&fit=crop",
-  },
-  {
-    id: "barcelona-culture",
-    title: "Barcelona Culture",
-    country: "Spain",
-    days: 5,
-    rating: 4.6,
-    reviews: 201,
-    price: 920,
-    type: "City",
-    img: "https://images.unsplash.com/photo-1464798429116-8e26f96b2e9c?q=80&w=1400&auto=format&fit=crop",
-  },
-  {
-    id: "santorini-romance",
-    title: "Santorini Romance",
-    country: "Greece",
-    days: 5,
-    rating: 4.8,
-    reviews: 167,
-    price: 1290,
-    type: "Beach",
-    img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1400&auto=format&fit=crop",
-  },
-  {
-    id: "dolomites-escape",
-    title: "Dolomites Escape",
-    country: "Italy",
-    days: 6,
-    rating: 4.7,
-    reviews: 96,
-    price: 1150,
-    type: "Adventure",
-    img: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1400&auto=format&fit=crop",
-  },
+  { id: "paris-city-break", title: "Paris City Break", country: "France", days: 4, rating: 4.8, reviews: 231, price: 799, type: "City", img: "https://images.unsplash.com/photo-1508057198894-247b23fe5ade?q=80&w=1400&auto=format&fit=crop" },
+  { id: "amalfi-coast-sun", title: "Amalfi Coast Sun", country: "Italy", days: 6, rating: 4.7, reviews: 188, price: 1190, type: "Beach", img: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1400&auto=format&fit=crop" },
+  { id: "swiss-alps-trek", title: "Swiss Alps Trek", country: "Switzerland", days: 7, rating: 4.9, reviews: 142, price: 1390, type: "Adventure", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1400&auto=format&fit=crop" },
+  { id: "barcelona-culture", title: "Barcelona Culture", country: "Spain", days: 5, rating: 4.6, reviews: 201, price: 920, type: "City", img: "https://images.unsplash.com/photo-1464798429116-8e26f96b2e9c?q=80&w=1400&auto=format&fit=crop" },
+  { id: "santorini-romance", title: "Santorini Romance", country: "Greece", days: 5, rating: 4.8, reviews: 167, price: 1290, type: "Beach", img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1400&auto=format&fit=crop" },
+  { id: "dolomites-escape", title: "Dolomites Escape", country: "Italy", days: 6, rating: 4.7, reviews: 96, price: 1150, type: "Adventure", img: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1400&auto=format&fit=crop" },
 ];
 
 const FILTERS = ["All", "City", "Beach", "Adventure"];
 
-// small star row
+/* Stars (with halves) */
 const Stars = ({ value = 0 }) => {
   const full = Math.floor(value);
   const half = value % 1 >= 0.5;
@@ -101,13 +41,33 @@ const Stars = ({ value = 0 }) => {
 };
 
 const Packages = () => {
-  const [active, setActive] = useState("All");
+  const [activeType, setActiveType] = useState("All");
   const [visible, setVisible] = useState(6);
+  const [country, setCountry] = useState("All Countries");
 
+  // Build country list from data
+  const countries = useMemo(() => {
+    const set = new Set(PACKAGES.map(p => p.country));
+    return ["All Countries", ...Array.from(set).sort()];
+  }, []);
+
+  // Filter by country then type
   const filtered = useMemo(() => {
-    if (active === "All") return PACKAGES;
-    return PACKAGES.filter((p) => p.type === active);
-  }, [active]);
+    let list = PACKAGES;
+    if (country !== "All Countries") list = list.filter(p => p.country === country);
+    if (activeType !== "All") list = list.filter(p => p.type === activeType);
+    return list;
+  }, [country, activeType]);
+
+  const onChangeCountry = (e) => {
+    setCountry(e.target.value);
+    setVisible(6);
+  };
+
+  const onChangeType = (t) => {
+    setActiveType(t);
+    setVisible(6);
+  };
 
   return (
     <section className="py-16 sm:py-20">
@@ -122,72 +82,99 @@ const Packages = () => {
           </p>
         </div>
 
-        {/* Filters */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-          {FILTERS.map((f) => (
-            <button
-              key={f}
-              onClick={() => { setActive(f); setVisible(6); }}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition
-                ${active === f
-                  ? "bg-gray-900 text-white"
-                  : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50"}`}
+        {/* Controls */}
+        <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
+          {/* Country dropdown */}
+          <div className="w-full sm:w-72">
+            <label className="block text-xs font-semibold text-gray-600">Country</label>
+            <select
+              value={country}
+              onChange={onChangeCountry}
+              className="mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900/10"
             >
-              {f}
-            </button>
-          ))}
+              {countries.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Type chips */}
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {FILTERS.map((f) => (
+              <button
+                key={f}
+                onClick={() => onChangeType(f)}
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition
+                  ${activeType === f
+                    ? "bg-gray-900 text-white"
+                    : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50"}`}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Results info */}
+        <div className="mt-4 text-center sm:text-left text-sm text-gray-500">
+          Showing {Math.min(visible, filtered.length)} of {filtered.length} result{filtered.length !== 1 ? "s" : ""}
+          {country !== "All Countries" ? ` in ${country}` : ""}{activeType !== "All" ? ` · ${activeType}` : ""}
         </div>
 
         {/* Grid */}
-        <div className="mt-10 grid gap-8 sm:gap-10 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.slice(0, visible).map((p) => (
-            <article key={p.id} className="group rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
-              {/* image */}
-              <Link to={`/packages/${p.id}`} className="block relative">
-                <img
-                  src={p.img}
-                  alt={p.title}
-                  className="aspect-[16/11] w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                {/* badge */}
-                <span className="absolute top-3 left-3 rounded-md bg-white/90 px-2.5 py-1 text-xs font-semibold text-gray-900 shadow">
-                  {p.type}
-                </span>
-              </Link>
+        {filtered.length === 0 ? (
+          <div className="mt-10 rounded-xl border border-gray-200 bg-white p-6 text-center text-gray-600">
+            No packages found. Try a different country or type.
+          </div>
+        ) : (
+          <div className="mt-6 grid gap-8 sm:gap-10 md:grid-cols-2 lg:grid-cols-3">
+            {filtered.slice(0, visible).map((p) => (
+              <article key={p.id} className="group rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+                {/* image */}
+                <Link to={`/packages/${p.id}`} className="block relative">
+                  <img
+                    src={p.img}
+                    alt={p.title}
+                    className="aspect-[16/11] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <span className="absolute top-3 left-3 rounded-md bg-white/90 px-2.5 py-1 text-xs font-semibold text-gray-900 shadow">
+                    {p.type}
+                  </span>
+                </Link>
 
-              {/* content */}
-              <div className="p-5">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-gray-500">{p.country} · {p.days} days</p>
-                  <div className="flex items-center gap-2">
-                    <Stars value={p.rating} />
-                    <span className="text-sm text-gray-500">({p.reviews})</span>
-                  </div>
-                </div>
-
-                <h3 className="mt-2 text-lg font-extrabold text-gray-900">
-                  <Link to={`/packages/${p.id}`} className="hover:underline">
-                    {p.title}
-                  </Link>
-                </h3>
-
-                <div className="mt-4 flex items-center justify-between">
-                  <div>
-                    <p className="text-xs uppercase tracking-wide text-gray-500">From</p>
-                    <p className="text-2xl font-extrabold text-gray-900">${p.price}</p>
+                {/* content */}
+                <div className="p-5">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-gray-500">{p.country} · {p.days} days</p>
+                    <div className="flex items-center gap-2">
+                      <Stars value={p.rating} />
+                      <span className="text-sm text-gray-500">({p.reviews})</span>
+                    </div>
                   </div>
 
-                  <Link
-                    to={`/packages/${p.id}`}
-                    className="inline-flex items-center rounded-md bg-yellow-500 px-4 py-2 text-sm font-semibold text-black hover:bg-yellow-400 transition"
-                  >
-                    View Details
-                  </Link>
+                  <h3 className="mt-2 text-lg font-extrabold text-gray-900">
+                    <Link to={`/packages/${p.id}`} className="hover:underline">
+                      {p.title}
+                    </Link>
+                  </h3>
+
+                  <div className="mt-4 flex items-center justify-between">
+                    <div>
+                      <p className="text-xs uppercase tracking-wide text-gray-500">From</p>
+                      <p className="text-2xl font-extrabold text-gray-900">${p.price}</p>
+                    </div>
+                    <Link
+                      to={`/packages/${p.id}`}
+                      className="inline-flex items-center rounded-md bg-yellow-500 px-4 py-2 text-sm font-semibold text-black hover:bg-yellow-400 transition"
+                    >
+                      View Details
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
-        </div>
+              </article>
+            ))}
+          </div>
+        )}
 
         {/* Load more */}
         {filtered.length > visible && (
