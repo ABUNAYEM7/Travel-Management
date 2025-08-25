@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const CustomPrices = () => {
   return (
@@ -43,9 +44,11 @@ const CustomPrices = () => {
 
             {/* CTA row */}
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <button className="inline-flex items-center justify-center rounded-md bg-gray-900 px-6 py-3 text-white font-semibold shadow-sm hover:bg-gray-800 transition">
+              <Link
+              to={"/contact"}
+               className="inline-flex items-center justify-center rounded-md bg-gray-900 px-6 py-3 text-white font-semibold shadow-sm hover:bg-gray-800 transition">
                 Request Custom Price
-              </button>
+              </Link>
 
               <p className="text-sm text-gray-500">
                 Avg. turnaround <span className="font-semibold text-gray-700">6–12 hours</span>

@@ -30,9 +30,11 @@ export default function Hero({ overlay = true }) {
         </p>
 
         <div className="mt-8">
-          <button className="bg-yellow-500 hover:bg-yellow-400 text-black font-bold px-7 py-3 rounded-sm shadow-sm transition">
+          <Link
+          to={'/packages'}
+           className="bg-yellow-500 hover:bg-yellow-400 text-black font-bold px-7 py-3 rounded-sm shadow-sm transition">
             GET STARTED
-          </button>
+          </Link>
         </div>
 
         <div className="mt-10 flex gap-2">

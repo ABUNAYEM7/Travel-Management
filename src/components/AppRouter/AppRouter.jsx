@@ -7,8 +7,10 @@ import Packages from "../Pages/Packages/Packages";
 import Hotels from "../Pages/Hotels/Hotels";
 import Insurance from "../Pages/Insurance/Insurence";
 import Contact from "../Pages/Contact/Contact";
-import Blog from "../Pages/Blog/Blog";
 import PackageDetails from "../Pages/PackageDetails/PackageDetails";
+import TravelTips from "../Pages/Blog/TravelTips";
+import CityGuides from "../Pages/Blog/CityGuides";
+import DealsAndUpdate from "../Pages/Blog/DealsAndUpdate";
 
 const AppRouter = () => {
   return (
@@ -24,7 +26,9 @@ const AppRouter = () => {
         <Route path="hotels" element={<Hotels />} />
         <Route path="insurance" element={<Insurance />} />
         <Route path="contact" element={<Contact />} />
-        <Route path="blog" element={<Blog />} />
+        <Route path="/travel-tips" element={<TravelTips />} />
+        <Route path="/city-guides" element={<CityGuides />} />
+        <Route path="/deals-updates" element={<DealsAndUpdate />} />
         <Route path="packages/:id" element={<PackageDetails />} />
         {/* 404 */}
         {/* <Route path="*" element={<NotFound />} /> */}

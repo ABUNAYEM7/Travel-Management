@@ -117,7 +117,7 @@ export default function Navbar() {
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
-                      <path
+                      <x
                         fillRule="evenodd"
                         d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.127l3.71-3.896a.75.75 0 1 1 1.08 1.04l-4.24 4.46a.75.75 0 0 1-1.08 0l-4.24-4.46a.75.75 0 0 1 .02-1.06z"
                         clipRule="evenodd"
@@ -127,11 +127,11 @@ export default function Navbar() {
                   {blogOpen && (
                     <div className={`absolute right-0 mt-2 w-44 rounded-lg border p-2 backdrop-blur-md
                       ${isHome ? "border-white/10 bg-black/80" : "border-gray-200 bg-white shadow-xl"}`}>
-                      <Link to="/blog/tips" className={`block px-3 py-2 text-sm rounded-md
+                      <Link to="/travel-tips" className={`block px-3 py-2 text-sm rounded-md
                         ${isHome ? "text-white/90 hover:bg-white/10" : "text-gray-700 hover:bg-gray-50"}`}>Travel Tips</Link>
-                      <Link to="/blog/guides" className={`block px-3 py-2 text-sm rounded-md
+                      <Link to="/city-guides" className={`block px-3 py-2 text-sm rounded-md
                         ${isHome ? "text-white/90 hover:bg-white/10" : "text-gray-700 hover:bg-gray-50"}`}>City Guides</Link>
-                      <Link to="/blog/deals" className={`block px-3 py-2 text-sm rounded-md
+                      <Link to="/deals-updates" className={`block px-3 py-2 text-sm rounded-md
                         ${isHome ? "text-white/90 hover:bg-white/10" : "text-gray-700 hover:bg-gray-50"}`}>Deals & Updates</Link>
                     </div>
                   )}
