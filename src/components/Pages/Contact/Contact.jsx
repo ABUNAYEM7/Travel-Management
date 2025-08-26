@@ -10,6 +10,7 @@ const Contact = () => {
   const [form, setForm] = useState({
     name: "",
     email: "",
+        phone: "", 
     subject: "",
     message: "",
   });
@@ -34,6 +35,7 @@ const Contact = () => {
         {
           name: form.name,
           email: form.email,
+          phone: form.phone,  
           subject: form.subject,
           message: form.message,
         },
@@ -41,7 +43,7 @@ const Contact = () => {
       );
 
       setSent(true);
-      setForm({ name: "", email: "", subject: "", message: "" });
+      setForm({ name: "", email: "",phone: "", subject: "", message: "" });
       setTimeout(() => setSent(false), 3000);
     } catch (err) {
       setError("Could not send your message. Please try again.");
@@ -50,19 +52,17 @@ const Contact = () => {
     }
   };
 
-  useEffect(() => {
-    const stateSubject = location.state?.subject;
-    if (stateSubject) {
-      setForm((prev) => ({ ...prev, subject: stateSubject }));
-    }
-  }, [location.state]);
+  // useEffect(() => {
+  //   const stateSubject = location.state?.subject;
+  //   if (stateSubject) {
+  //     setForm((prev) => ({ ...prev, subject: stateSubject }));
+  //   }
+  // }, [location.state]);
 
   useEffect(() => {
     const s = location.state?.subject;
     if (s) setForm((prev) => ({ ...prev, subject: s }));
   }, [location.state]);
-
-
 
   return (
     <section className="py-16 sm:py-20">
@@ -264,6 +264,26 @@ const Contact = () => {
                     className="mt-1 w-full rounded-md border border-gray-200 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-900/10"
                   />
                 </div>
+              </div>
+
+              {/* 👇 new Phone field */}
+              <div>
+                <label
+                  htmlFor="phone"
+                  className="block text-xs font-semibold text-gray-600"
+                >
+                  Mobile Number
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  value={form.phone}
+                  onChange={onChange}
+                  required
+                  placeholder="+33 6 12 34 56 78"
+                  className="mt-1 w-full rounded-md border border-gray-200 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-900/10"
+                />
               </div>
 
               <div>
