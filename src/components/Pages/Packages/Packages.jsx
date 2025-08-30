@@ -2,15 +2,82 @@ import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 const PACKAGES = [
-  { id: "paris-city-break", title: "Paris City Break", country: "France", days: 4, rating: 4.8, reviews: 231, price: 799, type: "City", img: "https://images.unsplash.com/photo-1508057198894-247b23fe5ade?q=80&w=1400&auto=format&fit=crop" },
-  { id: "amalfi-coast-sun", title: "Amalfi Coast Sun", country: "Italy", days: 6, rating: 4.7, reviews: 188, price: 1190, type: "Beach", img: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1400&auto=format&fit=crop" },
-  { id: "swiss-alps-trek", title: "Swiss Alps Trek", country: "Switzerland", days: 7, rating: 4.9, reviews: 142, price: 1390, type: "Adventure", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1400&auto=format&fit=crop" },
-  { id: "barcelona-culture", title: "Barcelona Culture", country: "Spain", days: 5, rating: 4.6, reviews: 201, price: 920, type: "City", img: "https://images.unsplash.com/photo-1464798429116-8e26f96b2e9c?q=80&w=1400&auto=format&fit=crop" },
-  { id: "santorini-romance", title: "Santorini Romance", country: "Greece", days: 5, rating: 4.8, reviews: 167, price: 1290, type: "Beach", img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1400&auto=format&fit=crop" },
-  { id: "dolomites-escape", title: "Dolomites Escape", country: "Italy", days: 6, rating: 4.7, reviews: 96, price: 1150, type: "Adventure", img: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1400&auto=format&fit=crop" },
+  {
+    id: "paris-city-break",
+    title: "Paris City Break",
+    country: "France",
+    days: 4,
+    rating: 4.8,
+    reviews: 231,
+    price: 799,
+    type: "City",
+    category: "Couple", // 👈 NEW
+    img: "https://images.unsplash.com/photo-1508057198894-247b23fe5ade?q=80&w=1400&auto=format&fit=crop",
+  },
+  {
+    id: "amalfi-coast-sun",
+    title: "Amalfi Coast Sun",
+    country: "Italy",
+    days: 6,
+    rating: 4.7,
+    reviews: 188,
+    price: 1190,
+    type: "Beach",
+    category: "Family", // 👈 NEW
+    img: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1400&auto=format&fit=crop",
+  },
+  {
+    id: "swiss-alps-trek",
+    title: "Swiss Alps Trek",
+    country: "Switzerland",
+    days: 7,
+    rating: 4.9,
+    reviews: 142,
+    price: 1390,
+    type: "Adventure",
+    category: "Group", // 👈 NEW
+    img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1400&auto=format&fit=crop",
+  },
+  {
+    id: "barcelona-culture",
+    title: "Barcelona Culture",
+    country: "Spain",
+    days: 5,
+    rating: 4.6,
+    reviews: 201,
+    price: 920,
+    type: "City",
+    category: "Single", // 👈 NEW
+    img: "https://images.unsplash.com/photo-1464798429116-8e26f96b2e9c?q=80&w=1400&auto=format&fit=crop",
+  },
+  {
+    id: "santorini-romance",
+    title: "Santorini Romance",
+    country: "Greece",
+    days: 5,
+    rating: 4.8,
+    reviews: 167,
+    price: 1290,
+    type: "Beach",
+    category: "Couple", // 👈 NEW
+    img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1400&auto=format&fit=crop",
+  },
+  {
+    id: "dolomites-escape",
+    title: "Dolomites Escape",
+    country: "Italy",
+    days: 6,
+    rating: 4.7,
+    reviews: 96,
+    price: 1150,
+    type: "Adventure",
+    category: "Group", // 👈 NEW
+    img: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1400&auto=format&fit=crop",
+  },
 ];
 
 const FILTERS = ["All", "City", "Beach", "Adventure"];
+const TRAVELER_CATEGORIES = ["All", "Single", "Couple", "Family", "Group"];
 
 /* Stars (with halves) */
 const Stars = ({ value = 0 }) => {
@@ -42,6 +109,7 @@ const Stars = ({ value = 0 }) => {
 
 const Packages = () => {
   const [activeType, setActiveType] = useState("All");
+  const [activeTraveler, setActiveTraveler] = useState("All"); // 👈 NEW
   const [visible, setVisible] = useState(6);
   const [country, setCountry] = useState("All Countries");
 
@@ -51,13 +119,14 @@ const Packages = () => {
     return ["All Countries", ...Array.from(set).sort()];
   }, []);
 
-  // Filter by country then type
+  // Filter by country, then type, then traveler category
   const filtered = useMemo(() => {
     let list = PACKAGES;
     if (country !== "All Countries") list = list.filter(p => p.country === country);
     if (activeType !== "All") list = list.filter(p => p.type === activeType);
+    if (activeTraveler !== "All") list = list.filter(p => p.category === activeTraveler);
     return list;
-  }, [country, activeType]);
+  }, [country, activeType, activeTraveler]);
 
   const onChangeCountry = (e) => {
     setCountry(e.target.value);
@@ -66,6 +135,11 @@ const Packages = () => {
 
   const onChangeType = (t) => {
     setActiveType(t);
+    setVisible(6);
+  };
+
+  const onChangeTraveler = (t) => {
+    setActiveTraveler(t);
     setVisible(6);
   };
 
@@ -83,33 +157,55 @@ const Packages = () => {
         </div>
 
         {/* Controls */}
-        <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
-          {/* Country dropdown */}
-          <div className="w-full sm:w-72">
-            <label className="block text-xs font-semibold text-gray-600">Country</label>
-            <select
-              value={country}
-              onChange={onChangeCountry}
-              className="mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900/10"
-            >
-              {countries.map((c) => (
-                <option key={c} value={c}>{c}</option>
+        <div className="mt-8 flex flex-col gap-4">
+          {/* Top row: Country dropdown */}
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
+            <div className="w-full sm:w-72">
+              <label className="block text-xs font-semibold text-gray-600">Country</label>
+              <select
+                value={country}
+                onChange={onChangeCountry}
+                className="mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900/10"
+              >
+                {countries.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Type chips (City/Beach/Adventure/All) */}
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {FILTERS.map((f) => (
+                <button
+                  key={f}
+                  onClick={() => onChangeType(f)}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold transition
+                    ${activeType === f
+                      ? "bg-gray-900 text-white"
+                      : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50"}`}
+                >
+                  {f}
+                </button>
               ))}
-            </select>
+            </div>
           </div>
 
-          {/* Type chips */}
+          {/* Second row: Traveler category chips */}
           <div className="flex flex-wrap items-center justify-center gap-2">
-            {FILTERS.map((f) => (
+            {TRAVELER_CATEGORIES.map((t) => (
               <button
-                key={f}
-                onClick={() => onChangeType(f)}
+                key={t}
+                onClick={() => onChangeTraveler(t)}
                 className={`rounded-full px-4 py-2 text-sm font-semibold transition
-                  ${activeType === f
-                    ? "bg-gray-900 text-white"
+                  ${activeTraveler === t
+                    ? "bg-yellow-500 text-black"
                     : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50"}`}
+                title="Filter by traveler type"
               >
-                {f}
+                {t === "Single" ? "Single Tour" :
+                 t === "Couple" ? "Couple" :
+                 t === "Family" ? "Family" :
+                 t === "Group" ? "Group Tour" : "All Travelers"}
               </button>
             ))}
           </div>
@@ -118,13 +214,15 @@ const Packages = () => {
         {/* Results info */}
         <div className="mt-4 text-center sm:text-left text-sm text-gray-500">
           Showing {Math.min(visible, filtered.length)} of {filtered.length} result{filtered.length !== 1 ? "s" : ""}
-          {country !== "All Countries" ? ` in ${country}` : ""}{activeType !== "All" ? ` · ${activeType}` : ""}
+          {country !== "All Countries" ? ` in ${country}` : ""}
+          {activeType !== "All" ? ` · ${activeType}` : ""}
+          {activeTraveler !== "All" ? ` · ${activeTraveler}` : ""}
         </div>
 
         {/* Grid */}
         {filtered.length === 0 ? (
           <div className="mt-10 rounded-xl border border-gray-200 bg-white p-6 text-center text-gray-600">
-            No packages found. Try a different country or type.
+            No packages found. Try a different country, type, or traveler category.
           </div>
         ) : (
           <div className="mt-6 grid gap-8 sm:gap-10 md:grid-cols-2 lg:grid-cols-3">
@@ -137,8 +235,15 @@ const Packages = () => {
                     alt={p.title}
                     className="aspect-[16/11] w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
+                  {/* type badge */}
                   <span className="absolute top-3 left-3 rounded-md bg-white/90 px-2.5 py-1 text-xs font-semibold text-gray-900 shadow">
                     {p.type}
+                  </span>
+                  {/* traveler badge */}
+                  <span className="absolute top-3 right-3 rounded-md bg-yellow-500/95 px-2.5 py-1 text-xs font-semibold text-black shadow">
+                    {p.category === "Single" ? "Single Tour" :
+                     p.category === "Couple" ? "Couple" :
+                     p.category === "Family" ? "Family" : "Group Tour"}
                   </span>
                 </Link>
 

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 /* --- mock data --- */
@@ -139,14 +139,51 @@ const AmenityIcon = ({ type }) => {
   return <span className="text-gray-600">{map[type]}</span>;
 };
 
+const useClickOutside = (ref, onClose) => {
+  useEffect(() => {
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) onClose();
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [ref, onClose]);
+};
+
+/* ===================== */
+/*      MAIN VIEW        */
+/* ===================== */
 const Hotels = () => {
   const [active, setActive] = useState("All");
   const [query, setQuery] = useState("");
-  const [guests, setGuests] = useState(2);
+
+  // --- new search UI state (as per screenshot) ---
+  const [destination, setDestination] = useState("");
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
+  const [rooms, setRooms] = useState(1);
+  const [adults, setAdults] = useState(2);
+  const [children, setChildren] = useState(0);
+
+  const [guestOpen, setGuestOpen] = useState(false);
+  const guestRef = useRef(null);
+  useClickOutside(guestRef, () => setGuestOpen(false));
+
+  const nights =
+    checkIn && checkOut
+      ? Math.max(
+          0,
+          Math.ceil(
+            (new Date(checkOut).getTime() - new Date(checkIn).getTime()) /
+              (1000 * 60 * 60 * 24)
+          )
+        )
+      : 0;
 
   const filtered = useMemo(() => {
     let list = HOTELS;
     if (active !== "All") list = list.filter((h) => h.type === active);
+
+    // keep previous quick search behavior: use "query" to filter by city/name
     if (query.trim()) {
       const q = query.toLowerCase();
       list = list.filter(
@@ -154,8 +191,16 @@ const Hotels = () => {
           h.city.toLowerCase().includes(q) || h.name.toLowerCase().includes(q)
       );
     }
+
+    // also apply destination text (from the new UI) if used
+    if (destination.trim()) {
+      const d = destination.toLowerCase();
+      list = list.filter(
+        (h) => h.city.toLowerCase().includes(d) || h.name.toLowerCase().includes(d)
+      );
+    }
     return list;
-  }, [active, query]);
+  }, [active, query, destination]);
 
   return (
     <section className="py-16 sm:py-20">
@@ -170,42 +215,148 @@ const Hotels = () => {
           </p>
         </div>
 
-        {/* Search bar */}
+        {/* Search bar (redesigned to match the screenshot) */}
         <div className="mt-8 rounded-xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm">
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-5">
+            {/* Destination */}
             <div className="sm:col-span-2">
               <label className="block text-xs font-semibold text-gray-600">
-                Destination / Hotel
+                Destination
               </label>
               <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Try “Paris” or “Ritz”"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                placeholder="City, airport, region, landmark or property..."
                 className="mt-1 w-full rounded-md border border-gray-200 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-900/10"
               />
             </div>
+
+            {/* Check-in */}
             <div>
               <label className="block text-xs font-semibold text-gray-600">
-                Guests
+                Check-in{nights > 0 && (
+                  <span className="ml-2 text-[11px] font-normal text-gray-500">
+                    {nights} {nights === 1 ? "night" : "nights"}
+                  </span>
+                )}
               </label>
               <input
-                type="number"
-                min={1}
-                value={guests}
-                onChange={(e) => setGuests(parseInt(e.target.value || "1"))}
+                type="date"
+                value={checkIn}
+                onChange={(e) => setCheckIn(e.target.value)}
                 className="mt-1 w-full rounded-md border border-gray-200 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-900/10"
               />
             </div>
-            <div className="flex items-end">
-              <button
-                onClick={() => {
-                  /* no-op (mock) */
-                }}
-                className="w-full rounded-md bg-gray-900 px-4 py-2.5 font-semibold text-white hover:bg-gray-800 transition"
-              >
-                Search
-              </button>
+
+            {/* Check-out */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600">
+                Check-out
+              </label>
+              <input
+                type="date"
+                value={checkOut}
+                min={checkIn || undefined}
+                onChange={(e) => setCheckOut(e.target.value)}
+                className="mt-1 w-full rounded-md border border-gray-200 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-900/10"
+              />
             </div>
+
+            {/* Rooms & Guests */}
+            <div className="relative" ref={guestRef}>
+              <label className="block text-xs font-semibold text-gray-600">
+                Rooms and Guests
+              </label>
+              <button
+                type="button"
+                onClick={() => setGuestOpen((s) => !s)}
+                className="mt-1 w-full rounded-md border border-gray-200 px-3 py-2 text-left outline-none focus:ring-2 focus:ring-gray-900/10"
+              >
+                {rooms} {rooms === 1 ? "room" : "rooms"},{" "}
+                {adults} {adults === 1 ? "adult" : "adults"},{" "}
+                {children} {children === 1 ? "child" : "children"}
+              </button>
+
+              {guestOpen && (
+                <div className="absolute z-20 mt-2 w-full rounded-lg border border-gray-200 bg-white p-3 shadow-lg">
+                  {[
+                    {
+                      label: "Rooms",
+                      value: rooms,
+                      set: setRooms,
+                      min: 1,
+                    },
+                    {
+                      label: "Adults",
+                      value: adults,
+                      set: setAdults,
+                      min: 1,
+                    },
+                    {
+                      label: "Children",
+                      value: children,
+                      set: setChildren,
+                      min: 0,
+                    },
+                  ].map((row) => (
+                    <div
+                      key={row.label}
+                      className="flex items-center justify-between py-2"
+                    >
+                      <span className="text-sm font-medium text-gray-700">
+                        {row.label}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => row.set(Math.max(row.min, row.value - 1))}
+                          className="h-8 w-8 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50"
+                        >
+                          −
+                        </button>
+                        <span className="w-6 text-center text-sm font-semibold text-gray-900">
+                          {row.value}
+                        </span>
+                        <button
+                          onClick={() => row.set(row.value + 1)}
+                          className="h-8 w-8 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="pt-2">
+                    <button
+                      onClick={() => setGuestOpen(false)}
+                      className="w-full rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white hover:bg-gray-800"
+                    >
+                      Done
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Search button row */}
+          <div className="mt-3 flex items-center justify-end">
+            <button
+              onClick={() => {
+                // mock submit — keep behavior minimal & non-breaking
+                setQuery(destination);
+              }}
+              className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-5 py-2.5 font-semibold text-white hover:bg-blue-500 transition"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="h-5 w-5"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M10 2a8 8 0 1 1 5.293 13.707l4 4-1.414 1.414-4-4A8 8 0 0 1 10 2Zm0 2a6 6 0 1 0 0 12A6 6 0 0 0 10 4Z" />
+              </svg>
+              Search
+            </button>
           </div>
         </div>
 
