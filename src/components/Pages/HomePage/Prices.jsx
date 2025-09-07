@@ -4,17 +4,17 @@ const CATEGORIES = [
   {
     title: "Cheap Packages",
     items: ["New York", "Maldives", "Sri Lanka", "Nepal", "Thiland", "Singapore"],
-    price: "$1500",
+    prices: ["$500", "$700", "$650", "$400", "$550", "$600"],
   },
   {
     title: "Luxury Packages",
     items: ["New York", "Maldives", "Sri Lanka", "Nepal", "Thiland", "Singapore"],
-    price: "$1500",
+    prices: ["$3000", "$3500", "$2800", "$2500", "$2700", "$3200"], // Expensive prices
   },
   {
     title: "Camping Packages",
     items: ["New York", "Maldives", "Sri Lanka", "Nepal", "Thiland", "Singapore"],
-    price: "$1500",
+    prices: ["$1200", "$1500", "$1000", "$900", "$1100", "$1300"], // Mid-range prices
   },
 ];
 
@@ -49,14 +49,14 @@ const Prices = () => {
 
               {/* List */}
               <ul className="px-6 sm:px-8 py-6 space-y-4">
-                {cat.items.map((place) => (
+                {cat.items.map((place, index) => (
                   <li
                     key={place}
                     className="flex items-center justify-between text-[15px] text-gray-700"
                   >
                     <span>{place}</span>
                     <span className="min-w-[88px] text-center rounded-md border border-gray-200 bg-white px-4 py-2 font-semibold text-gray-800 shadow-xs">
-                      {cat.price}
+                      {cat.prices[index]}
                     </span>
                   </li>
                 ))}

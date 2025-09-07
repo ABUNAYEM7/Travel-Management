@@ -78,9 +78,9 @@ const awards = [
 const team = [
   { name: "Mila Kovács", role: "Head of Travel Design", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop" },
   { name: "Leo Martins", role: "Partnerships (EU)", img: "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=600&auto=format&fit=crop" },
-  { name: "Sofia Rossi", role: "Customer Success", img: "https://images.unsplash.com/photo-1544005316-04ce1f2d2d1e?q=80&w=600&auto=format&fit=crop" },
+  // { name: "Sofia Rossi", role: "Customer Success", img: "https://images.unsplash.com/photo-1544005316-04ce1f2d2d1e?q=80&w=600&auto=format&fit=crop" },
   { name: "Jonas Weber", role: "Ops & Logistics", img: "https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?q=80&w=600&auto=format&fit=crop" },
-  { name: "Amelia Novak", role: "Experience Curator", img: "https://images.unsplash.com/photo-1545996124-0501ebae84d3?q=80&w=600&auto=format&fit=crop" },
+  // { name: "Amelia Novak", role: "Experience Curator", img: "https://images.unsplash.com/photo-1545996124-0501ebae84d3?q=80&w=600&auto=format&fit=crop" },
   { name: "Clara Moreau", role: "Rail Specialist", img: "https://images.unsplash.com/photo-1544006659-f0b21884ce1d?q=80&w=600&auto=format&fit=crop" },
 ];
 
@@ -106,11 +106,20 @@ const testimonials = [
 ];
 
 const partners = [
-  "https://upload.wikimedia.org/wikipedia/commons/0/0e/Eurowings_logo_2015.svg",
-  "https://upload.wikimedia.org/wikipedia/commons/f/f5/Deutsche_Bahn_AG-Logo.svg",
-  "https://upload.wikimedia.org/wikipedia/commons/3/31/Airbnb_Logo_B%C3%A9lo.svg",
-  "https://upload.wikimedia.org/wikipedia/commons/1/1f/Expedia_2012_logo.svg",
-  "https://upload.wikimedia.org/wikipedia/commons/3/3b/Skyscanner_Logo_LockupHorizontal_SkyBlue_RGB.svg",
+  // "https://upload.wikimedia.org/wikipedia/commons/0/0e/Eurowings_logo_2015.svg",
+  // "https://upload.wikimedia.org/wikipedia/commons/f/f5/Deutsche_Bahn_AG-Logo.svg",
+  "https://i.ibb.co.com/7xm95JLf/attachment-42603907.png",
+  "https://i.ibb.co.com/s9snPZLY/download.png",
+  "https://i.ibb.co.com/NXWChRL/download-1.png",
+  "https://i.ibb.co.com/7xm95JLf/attachment-42603907.png",
+  "https://i.ibb.co.com/s9snPZLY/download.png",
+  "https://i.ibb.co.com/NXWChRL/download-1.png",  
+  "https://i.ibb.co.com/7xm95JLf/attachment-42603907.png",
+  "https://i.ibb.co.com/s9snPZLY/download.png",
+  "https://i.ibb.co.com/NXWChRL/download-1.png",  
+  "https://i.ibb.co.com/7xm95JLf/attachment-42603907.png",
+  "https://i.ibb.co.com/s9snPZLY/download.png",
+  "https://i.ibb.co.com/NXWChRL/download-1.png",
 ];
 
 // --- Components ---
@@ -257,7 +266,7 @@ const About = () => {
             <div className="absolute left-1/2 -translate-x-1/2 h-full w-px bg-gray-200 hidden md:block" />
             <ol className="space-y-8">
               {story.map((s, i) => (
-                <li key={s.year} className={`md:grid md:grid-cols-2 md:items-center md:gap-12 ${i % 2 ? "md:text-left" : "md:text-right"}`}>
+                <li key={s.year} className={`md:grid md:grid-cols-1 md:items-center md:gap-12 ${i % 2 ? "md:text-left" : "md:text-right"}`}>
                   <InView variants={fadeUp(i * 0.05)}>
                     <div className={`p-6 rounded-2xl bg-white border border-gray-100 shadow-sm ${i % 2 ? "md:order-2" : ""}`}>
                       <span className="text-xs font-semibold tracking-wider text-yellow-700 bg-yellow-100 rounded-full px-2 py-0.5">{s.year}</span>
@@ -405,46 +414,76 @@ const About = () => {
         </div>
       </Section>
 
-      {/* PARTNERS MARQUEE */}
-      <Section className="bg-slate-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <InView>
-            <h3 className="text-2xl font-extrabold text-gray-900 text-center">Trusted partners</h3>
-            <p className="mt-3 text-center text-gray-500">We work with the best to deliver a seamless trip.</p>
-          </InView>
-          <div className="mt-8 overflow-hidden">
-            <div className="flex gap-12 animate-[scroll_30s_linear_infinite] will-change-transform" style={{ maskImage: "linear-gradient(90deg, transparent, black 10%, black 90%, transparent)" }}>
-              {partners.concat(partners).map((src, i) => (
-                <img key={i} src={src} alt="partner" className="h-10 w-auto opacity-70 hover:opacity-100 transition" />
-              ))}
-            </div>
-          </div>
-          {/* marquee keyframes */}
-          <style>{`@keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
-        </div>
-      </Section>
+  {/* PARTNERS MARQUEE */}
+<Section className="bg-slate-50">
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <InView>
+      <h3 className="text-2xl font-extrabold text-gray-900 text-center">Trusted partners</h3>
+      <p className="mt-3 text-center text-gray-500">We work with the best to deliver a seamless trip.</p>
+    </InView>
+    <div className="mt-8 overflow-hidden">
+      <div
+        className="flex gap-12 animate-[scroll_30s_linear_infinite] will-change-transform"
+        style={{
+          maskImage:
+            "linear-gradient(90deg, transparent, black 10%, black 90%, transparent)",
+        }}
+      >
+        {partners.concat(partners).map((src, i) => (
+          <img
+            key={i}
+            src={src}
+            alt="partner"
+            className="h-25 w-auto opacity-70 hover:opacity-100 transition"
+          />
+        ))}
+      </div>
+    </div>
+    {/* marquee keyframes */}
+    <style>{`
+      @keyframes scroll {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+      }
+    `}</style>
+  </div>
+</Section>
+
 
       {/* PRESS */}
-      <Section>
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
-            <div className="grid gap-6 sm:grid-cols-3 items-center">
-              <div className="text-center">
-                <p className="text-xs uppercase tracking-wider text-gray-500">As seen in</p>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/The_Guardian_2018.svg" className="mx-auto mt-2 h-6" alt="Guardian" />
-              </div>
-              <div className="text-center">
-                <p className="text-xs uppercase tracking-wider text-gray-500">Featured by</p>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Forbes_logo.svg" className="mx-auto mt-2 h-6" alt="Forbes" />
-              </div>
-              <div className="text-center">
-                <p className="text-xs uppercase tracking-wider text-gray-500">Reviewed on</p>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/TripAdvisor_Logo.svg" className="mx-auto mt-2 h-6" alt="Tripadvisor" />
-              </div>
-            </div>
-          </div>
+<Section>
+  <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div className="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
+      <div className="grid gap-6 sm:grid-cols-3 items-center">
+        <div className="text-center">
+          <p className="text-xs uppercase tracking-wider text-gray-500">As seen in</p>
+          <img
+            src="https://i.ibb.co.com/Q7ZvgnWs/download-2.png"
+            className="mx-auto mt-2 h-30"
+            alt="Guardian"
+          />
         </div>
-      </Section>
+        <div className="text-center">
+          <p className="text-xs uppercase tracking-wider text-gray-500">Featured by</p>
+          <img
+            src="https://i.ibb.co.com/zhHkVQS7/download-3.png"
+            className="mx-auto mt-2 h-30"
+            alt="Forbes"
+          />
+        </div>
+        <div className="text-center">
+          <p className="text-xs uppercase tracking-wider text-gray-500">Reviewed on</p>
+          <img
+            src="https://i.ibb.co.com/SwP67DFm/download-4.png"
+            className="mx-auto mt-2 h-30"
+            alt="Tripadvisor"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</Section>
+
 
       {/* CTA BANNER */}
       <Section className="bg-gray-900">
